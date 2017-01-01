@@ -4,7 +4,8 @@ require 'active_support/core_ext/object'
 require 'active_support/concern'
 
 class Nokogiri::XML::Element
-  def to_division(parent=nil)
+  def to_division(parent_division=nil)
+    @parent_division = parent_division
     case self.name
     when 'Location'
       ListsOfCities::Root.new(name: '', code: '')
@@ -22,7 +23,7 @@ class Nokogiri::XML::Element
   end
 
   def to_division_hash
-    {name: self["Name"], code: self["Code"], parent: parent, xpath: self.path, parent_xpath: self.parent.path}
+    {name: self["Name"], code: self["Code"], parent: @parent_division, xpath: self.path, parent_xpath: self.parent.path}
   end
 end
 

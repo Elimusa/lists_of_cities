@@ -27,7 +27,7 @@ module ListsOfCities
 
       def has_many(resources)
         define_method resources.to_sym do
-          Association.new klass: ("ListsOfCities::#{resources.to_s.singularize.camelize}").constantize,
+          Association.new klass: ("ListsOfCities::#{resources.to_s.classify}").constantize,
                           this: self
         end
       end
