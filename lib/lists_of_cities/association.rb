@@ -14,6 +14,10 @@ module ListsOfCities
       klass.where(this, opts)
     end
 
+    def find_by(opts)
+      klass.find_by(this, opts)
+    end
+
     def first
       klass.first(this)
     end

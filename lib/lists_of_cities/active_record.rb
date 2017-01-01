@@ -16,6 +16,15 @@ module ListsOfCities
                    .map(&->(element){element.to_division(that)}))
       end
 
+      def find_by(that, opts)
+        _result = DataSource.instance.exec_query(Query.new(self.xml_node_path_for_all(that), opts).to_query).first
+        if _result.present?
+          _result.to_division(that)
+        else
+          nil
+        end
+      end
+
       def first(that)
         DataSource.instance.exec_query(self.xml_node_path_for_all(that)).first.to_division
       end
@@ -23,6 +32,7 @@ module ListsOfCities
       def last(that)
         DataSource.instance.exec_query(self.xml_node_path_for_all(that)).last.to_division
       end
+
       private
 
       def has_many(resources)
