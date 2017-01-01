@@ -7,11 +7,23 @@ module ListsOfCities
     end
 
     def all
-      klass.all(that: this)
+      klass.all(this)
     end
 
     def where(opts)
       klass.where(this, opts)
+    end
+
+    def find_by(opts)
+      klass.find_by(this, opts)
+    end
+
+    def first
+      klass.first(this)
+    end
+
+    def last
+      klass.last(this)
     end
   end
 end

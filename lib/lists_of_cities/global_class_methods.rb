@@ -12,7 +12,7 @@ module ListsOfCities
 
       def query_all(*args)
         path = Query.full_path_query_all(*args)
-        DataSource.instance.exec_query(path).map &:to_division
+        DivisionList.new(DataSource.instance.exec_query(path).map(&:to_division))
       end
 
       def find_by(*args)
