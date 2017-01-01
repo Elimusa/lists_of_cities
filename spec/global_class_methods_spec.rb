@@ -5,7 +5,7 @@ describe ListsOfCities::GlobalClassMethods do
     expect(ListsOfCities.countries.length).to_not be nil
   end
 
-  it "shoud return a countries which has code 1" do
+  it "shoud return a country which has code 1" do
     expect(ListsOfCities.country('1').code).to eq '1'
   end
 
