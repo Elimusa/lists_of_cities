@@ -13,39 +13,52 @@ module ListsOfCities
     end
 
     def self.full_path_query_all(country_code=nil, province_code=nil, city_code=nil, region_code=nil)
-      paths = [Root.xml_node_name]
-      if country_code.present?
-        if province_code.present?
-          if city_code.present?
-              paths << "#{City.xml_node_name}[@Code='#{city_code}']"
-              paths << "#{Region.xml_node_name}"
-          else
-            paths << "#{Province.xml_node_name}[@Code='#{province_code}']/#{City.xml_node_name}"
-          end
-        else
-          paths << "#{Country.xml_node_name}[@Code='#{country_code}']/#{Province.xml_node_name}"
-        end
+      paths = if country_code.present? && province_code.present? && city_code.present?
+        [
+          Root.xml_node_name,
+          "#{Country.xml_node_name}[@Code='#{country_code}']",
+          "#{Province.xml_node_name}[@Code='#{province_code}']",
+          "#{City.xml_node_name}[@Code='#{city_code}']",
+          "#{Region.xml_node_name}"
+        ]
+      elsif country_code.present? && province_code.present?          
+        [
+          Root.xml_node_name,
+          "#{Country.xml_node_name}[@Code='#{country_code}']",
+          "#{Province.xml_node_name}[@Code='#{province_code}']",
+          "#{City.xml_node_name}"
+        ]
+      elsif country_code.present?
+        [
+          Root.xml_node_name,
+          "#{Country.xml_node_name}[@Code='#{country_code}']",
+          "#{Province.xml_node_name}"
+        ]
       else
-        paths << "#{Country.xml_node_name}"
+        [
+          Root.xml_node_name,
+         "#{Country.xml_node_name}"
+        ]
       end
       paths.join("/")
     end
 
-    def self.full_path_query(country_code=nil, province_code=nil, city_code=nil, region_code=nil)
+    def self.full_path_query(country_code, province_code=nil, city_code=nil, region_code=nil)
       paths = [Root.xml_node_name]
       if country_code.present?
         paths << "#{Country.xml_node_name}[@Code='#{country_code}']"
         if province_code.present?
           paths << "#{Province.xml_node_name}[@Code='#{province_code}']"
           if city_code.present?
-              paths << "#{City.xml_node_name}[@Code='#{city_code}']"
-              if region_code.present?
-                paths << "#{Region.xml_node_name}[@Code='#{region_code}']"
-              end
+            paths << "#{City.xml_node_name}[@Code='#{city_code}']"
+            if region_code.present?
+              paths << "#{Region.xml_node_name}[@Code='#{region_code}']"
+            end
           end
         end
       else
-        raise
+        not_found = "Not found region"
+        raise ActiveRecord::NotFound, not_found
       end
       paths.join('/')
     end

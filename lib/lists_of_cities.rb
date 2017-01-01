@@ -4,21 +4,26 @@ require 'active_support/core_ext/object'
 require 'active_support/concern'
 
 class Nokogiri::XML::Element
-  def to_division(parent=nil)
+  def to_division(parent_division=nil)
+    @parent_division = parent_division
     case self.name
     when 'Location'
       ListsOfCities::Root.new(name: '', code: '')
     when 'CountryRegion'
-      ListsOfCities::Country.new(name: self["Name"], code: self["Code"], parent: parent)
+      ListsOfCities::Country.new(self.to_division_hash)
     when 'State'
-      ListsOfCities::Province.new(name: self["Name"], code: self["Code"], parent: parent)
+      ListsOfCities::Province.new(self.to_division_hash)
     when 'City'
-      ListsOfCities::City.new(name: self["Name"], code: self["Code"], parent: parent)
+      ListsOfCities::City.new(self.to_division_hash)
     when 'Region'
-      ListsOfCities::Region.new(name: self["Name"], code: self["Code"], parent: parent)
+      ListsOfCities::Region.new(self.to_division_hash)
     else
-      DivisionList.none
+      nil
     end
+  end
+
+  def to_division_hash
+    {name: self["Name"], code: self["Code"], parent: @parent_division, xpath: self.path, parent_xpath: self.parent.path}
   end
 end
 
@@ -26,7 +31,7 @@ module ListsOfCities
   class << self
     extend Forwardable
 
-    def_delegators :global, :countries, :provinces, :cities, :regions, :country, :province, :city
+    def_delegators :global, :countries, :provinces, :cities, :regions, :country, :province, :city, :region
 
     alias :states :provinces
     alias :state :province
