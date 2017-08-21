@@ -9,7 +9,7 @@ TODO: Delete this and the text above, and describe your gem
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'lists_of_cities', github: 'jianghenet/lists_of_cities'
+gem 'lists_of_cities', github: 'Elimusa/lists_of_cities'
 ```
 
 And then execute:
@@ -22,7 +22,7 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+    See the spec
 
 ## Development
 
